@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="offset-3 col-6">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+            <form class="text-center border border-light p-5 align-center" method="post">
+                <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+                <p class="h4 m-2">Sign in</p>
+                <input type="text" name="username" class="form-control mb-2" placeholder="username">
+                <input type="password" name="password" class="form-control mb-2" placeholder="Password">
+                <button class="btn btn-info mb-2" type="submit">Sign in</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

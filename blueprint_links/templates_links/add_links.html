@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+add links
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if session.get('active_project', None) %}
+    <br>
+    <h5 class="text-center"><b>Добавление ссылок</b>
+        <i class="fa fa-question-circle" data-toggle="tooltip" title="<ul>
+        <li>Новые ссылки добавляются в выбранный проект</li>
+        <li>Домены добавляются автоматически</li>
+        <li>Повторно ссылки не добавляются</li>
+        <li>При добавлении неактивных ссылок они станут активными</li>
+    </ul>"></i>
+    </h5>
+
+    <div class="row">
+        <div class="offset-3 col-sm-6">
+            <br>
+            <form action="{{ url_for('add_links') }}" method="post" class="border border-light">
+                <div class="row">
+                    <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+                    <textarea name="links" cols="100" rows="10" placeholder=" ссылки на мониторинг"></textarea>
+
+                    {% if session.get('role', '') in ['root', 'admin'] %}
+                    <button type="submit" class="btn btn-primary btn-block">Добавить</button>
+                    {% endif %}
+                </div>
+            </form>
+            <br>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message[0] }}" role="alert">
+                {{ message[1] | safe }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    {% else %}
+    <br>
+    <br>
+    <h3 class="text-center"><b>Выберите тайтл для работы</b></h3>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+Change template
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <br>
+    <div class="row">
+        <div class="col-10">
+            <ul>
+                <li>Для подстановки названия проекта- <b>{project}</b></li>
+                <li>Для подстановки домена сайта в текст письма - <b>{website}</b></li>
+                <li>Для подстановки ссылок с сайта - <b>{links}</b></li>
+            </ul>
+            <form action="{{ url_for('report_templates_change') }}" method="post">
+                <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-success">Изменить</button>
+                <br>
+                <br>
+                <input type="text" name="title_mail" class="form-control" value="{{ title_notice }}">
+                <br>
+                <br>
+                <textarea name="change_notice" id="chn" cols="100" rows="25">
+{{text_notice}}</textarea>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

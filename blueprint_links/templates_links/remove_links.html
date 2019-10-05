@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}
+add links
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if session.get('active_project', None) %}
+    <br>
+    <h5 class="text-center"><b>Удаление или пометка ссылок удаленными</b>
+    </h5>
+    <div class="row p-5">
+        <div class="col-sm-5">
+            <i class="fa fa-question-circle" data-toggle="tooltip" title="<ul>
+        <li>Ссылкам проставляется статус Removed (контент удален)</li>
+        <li>Если ссылок нет в базе, то ничего не произойдет</li>
+        </ul>">
+            </i>
+            <form action="{{ url_for('remove_links') }}" method="post" class="border border-light">
+                <div class="row">
+                    <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+                    <input name="remove_type" type=hidden value="update">
+                    <textarea name="links" cols="100" rows="10" placeholder=" Пометить удаленными"></textarea>
+                    {% if session.get('role', '') in ['root', 'admin'] %}
+                    <button type="submit" class="btn btn-warning btn-block">Отметить</button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        <div class="offset-2 col-sm-5">
+            <i class="fa fa-question-circle" data-toggle="tooltip" title="<ul>
+        <li>Удаление ссылок из БД по выбранному проекту</li>
+        <li>Если ссылок нет в базе, то ничего не произойдет</li>
+        </ul>">
+            </i>
+            <form action="{{ url_for('remove_links') }}" method="post" class="border border-light">
+                <div class="row">
+                    <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+                    <input name="remove_type" type=hidden value="remove">
+                    <textarea name="links" cols="100" rows="10" placeholder=" УДАЛИТЬ"></textarea>
+                    {% if session.get('role', '') in ['root', 'admin'] %}
+                    <button type="submit" class="btn btn-danger btn-block">Удалить</button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message[0] }}" role="alert">
+            {{ message[1] | safe }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    {% else %}
+    <br>
+    <br>
+    <h3 class="text-center"><b>Выберите тайтл для работы</b></h3>
+    {% endif %}
+</div>
+{% endblock %}

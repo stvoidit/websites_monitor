@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery-3.3.1.min .js') }}"></script>
+</head>
+
+<title>
+  {% block title %}
+  {% endblock %} | RenReport
+</title>
+
+{% include 'new_navbar.html' %}
+
+<body>
+  {% block content %}
+  {% endblock %}
+</body>
+
+{% if 'logged_in' in session %}
+<footer class="page-footer font-small blue>
+    <hr>
+    <div class=" container-fluid text-center text-md-left">
+  </div>
+  <div class="footer-copyright p-3">© 2019 Copyright:
+    <a href="mailto:stvoid.it@yandex.ru"> StVoid</a>
+  </div>
+</footer>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='js/main.js') }}"></script> -->
+<script>
+  $(document).ready(function () {
+    $.ajax({
+      type: "GET",
+      beforeSend: function (request) {
+        var csrftoken = "{{ csrf_token() }}"
+        request.setRequestHeader("X-CSRFToken", csrftoken);
+      },
+      url: "/project_choise",
+      success: function (response) {
+        var sel = document.getElementById("ct_list")
+        var user_title = "{{ session.get('active_project', 'None') }}"
+        if (user_title == 'None') {
+          $("<option>Выберите тайтл...</option>").appendTo('#ct_list');
+        }
+        for (var k in response) {
+          var title = k
+          var id_title = response[k]
+          if (id_title == user_title) {
+            $('<option selected>' + title + "</option>").attr({ value: id_title, text: title }).appendTo('#ct_list');
+          } else {
+            $('<option>' + title + "</option>").attr({ value: id_title, text: title }).appendTo('#ct_list');
+          }
+        }
+      },
+      error: function () {
+        console.log('error');
+      }
+    });
+  })
+</script>
+<script>
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip({ delay: { "show": 150, "hide": 200 }, html: true, boundary: 'window' })
+  })
+</script>
+<script>
+  $(document).ready(function () {
+    $('body').fadeIn({ duration: 150 });
+  })
+</script>
+
+</html>

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}
+Statistic
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <br>
+    {% if active_title %}
+    <h2 class="text-center">{{active_title.name}}</h2>
+    <br>
+    <div class="row">
+        <div class="col-3">
+            <p><b>Количество всего: </b>{{ project_data|length + removed_links|length }}</p>
+            <p><b>Количество удаленных: </b>{{ removed_links|length }}</p>
+            <p><b>Количество активных: </b>{{ project_data|length }}</p>
+        </div>
+        <div class="col-6 text-center">
+            <a class="btn btn-info" href="{{url_for('report_templates')}}" role="button">Уведомления сайтам</a>
+            <br>
+            <br>
+            <form action="{{ url_for('get_report')}}" method="get">
+                <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-primary mb-4">Отчет по всем ссылкам</button>
+            </form>
+        </div>
+        <div class="col-3 text-right">
+            <form action="{{ url_for('project_links')}}" method="post">
+                <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+                <input name="del_project" type=hidden value="yes">
+                <i class="fa fa-exclamation-circle" data-toggle="tooltip"
+                    title="При удалении проекта - удаляются все ссылки добавленные по нему"></i>
+                <button class="mr-5 btn btn-danger">Удалить
+                    проект</button>
+            </form>
+        </div>
+    </div>
+    <br>
+    <table class="table table-sm table-striped table-bordered table-hover">
+        <thead class="thead-dark text-center">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Website</th>
+                <th scope="col">Link</th>
+                <th scope="col">Status</th>
+                <th scope="col">Removed</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in project_data %}
+            <tr>
+                <!-- <th scope="row">1</th> -->
+                <td>{{loop.index}}</td>
+                <td>{{ row.Websites.domain }}</td>
+                <td><a href="{{row.Links.link}}" rel="noreferrer" target="_blank">{{ row.Links.link }}</a></td>
+                <td class="text-center">{% if row.Links.status %}<i class="fas fa-check"></i>{% else %}Remove{% endif %}
+                </td>
+                <!-- <td class="text-center"><button id="{{row.Links.id}}" class="remove btn">Удалено?</button></td> -->
+                <td class="text-center"><button id="{{row.Links.id}}" class="remove btn"><i
+                            class="fas fa-minus-circle"></i></button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <br>
+    <br>
+    <h3 class="text-center"><b>Выберите тайтл для работы</b></h3>
+    {% endif %}
+</div>
+<script>
+    $(".remove").click(function () {
+        var id_ = $(this).attr("id")
+        $.ajax({
+            type: "POST",
+            beforeSend: function (request) {
+                var csrftoken = "{{ csrf_token() }}"
+                request.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            url: "/remove_ajax",
+            data: JSON.stringify({ project_id: "{{active_title.id}}", link_id: id_ }),
+            contentType: "application/json",
+            type: 'POST',
+            success: function (response) {
+                $("#" + id_).parent().parent().fadeToggle(duration = 250)
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{website.domain}}
+{% endblock %}
+
+{% block content %}
+<div class="container ">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-sm-4">
+            <br>
+            <div class="row justify-content-center p-1">
+            <h4><a href="{{ url_for('website_configurate', website_id=website.id) }}">{{website.domain}}</a></h4>
+            </div>
+            <br>
+            <div class="form-group">
+                <div class="row justify-content-center">
+                    <form action="{{ url_for('get_report')}}" method="get" class="p-1">
+                        <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+                        <input name="website" type=hidden value="{{ website.id }}">
+                        <button type="submit" class="btn btn-primary mb-4">Отчет</button>
+                        <i class="fa fa-question-circle" data-toggle="tooltip"
+                            title="Все ссылки с сайта по всем проектам"></i>
+                    </form>
+                    <form action="{{ url_for('website_configurate', website_id=website.id) }}" method="post"
+                        class="p-1">
+                        <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+                        <input name="recheak" type=hidden value="{{ website.id }}">
+                        <button type="submit" class="btn btn-primary mb-4">Спарсить данные</button>
+                        <i class="fa fa-question-circle" data-toggle="tooltip"
+                            title="Автоматически обновить данные по сайту"></i>
+                    </form>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message[0] }}" role="alert">
+                    {{ message[1] | safe }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        <div class="col-sm-7">
+            <br>
+            <form action="{{ url_for('website_configurate', website_id=website.id) }}" method="post">
+                <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label for="title"><b>Хостинг:</b></label>
+                    <input type="text" class="form-control" name="hosting" value="{{ website.hosting }}">
+                </div>
+                <div class="form-group">
+                    <label for="price"><b>IP адрес:</b></label>
+                    <input type="text" class="form-control" name="ip" value="{{ website.ip }}">
+                </div>
+                <div class="form-group">
+                    <label for="weight"><b>Почтовые адреса</b></label>
+                    <input type="text" class="form-control" name="email" value="{{ website.email }}">
+                </div>
+                <div class="form-group ml-4">
+                    <input type="checkbox" class="form-check-input" name="active"
+                        {% if website.status == True %}checked{% endif %}>
+                    <label class="form-check-label" for="exampleCheck1">Активный</label>
+                </div>
+                <button type="submit" class="btn btn-primary mb-4">Обновить конфиг</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile {{ session['username'] }}
+{% endblock %}
+
+
+{% block content %}
+<br>
+<div class="container ">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message[0] }}" role="alert">
+        {{ message[1] | safe }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="row p-3">
+        <div class="col border cardwindow">
+            <br>
+            <h5>Настройки профиля для сайта</h5>
+            <br>
+            <form action="{{ url_for('user_profile') }}" method="post">
+                <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+                <input name="change_profile" type=hidden value="{{ user.id }}">
+                <div class="form-group">
+                    <label for="worker_email"><b>Почта профиля</b></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">@</div>
+                        </div>
+                        <input type="text" class="form-control" name="user_email" value="{{ user.email }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="worker_password"><b>Пароль профиля</b></label>
+                    <input type="password" class="form-control" name="user_password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Обновить данные</button>
+            </form>
+            <br>
+        </div>
+        <div class="offset-2 col border cardwindow">
+            <br>
+            <h5>Настройки профиля для <b>рабочей почты</b></h5>
+            <br>
+            <form action="{{ url_for('user_profile') }}" method="post">
+                <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label for="worker_email"><b>Рабочая почта</b></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">@</div>
+                        </div>
+                        <input type="text" class="form-control" name="worker_email"
+                            value="{{ user_profile.work_email }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="smtp_server"><b>SMTP сервер</b></label>
+                    <input type="text" class="form-control" name="smtp_server" value="{{ user_profile.smtp_server }}"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="smtp_port"><b>SMTP порт</b></label>
+                    <input type="text" class="form-control" name="smtp_port" value="{{ user_profile.smtp_port }}"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="worker_password"><b>Пароль рабочей почты</b></label>
+                    <input type="password" class="form-control" name="worker_password">
+                </div>
+                <div class="form-group ml-4">
+                    <input type="checkbox" class="form-check-input" name="active"
+                        {% if user_profile.can_send == True %}checked{% endif %}>
+                    <label class="form-check-label" for="exampleCheck1">Отправка писем</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Обновить данные</button>
+            </form>
+            <br>
+        </div>
+    </div>
+    <br>
+</div>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+<div class="col-4 mt-2">
+    <form id="ct">
+        <div class="input-group">
+            <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+            <select class="custom-select mr-sm-2" id="ct_list" name="choise_title"></select>
+            <div class="input-group-append">
+                <button class="btn btn-sm" type="submit" formaction="/project_choise" formmethod="post"
+                    formenctype="application/x-www-form-urlencoded" form="ct"><i class="fas fa-play"></i></button>
+            </div>
+        </div>
+    </form>
+</div>

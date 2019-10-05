@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message[0] }}" role="alert">
+        {{ message[1] | safe }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <form action="/add_new_website/" method="post">
+        <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+        <div class="offset-3 form-group col-sm-6">
+            <br>
+            <label for="website"><b>Вебсайт:</b></label>
+            <input type="text" class="form-control" name="website" placeholder="Вебсайт" required>
+            <br>
+            <label for=""><b>Данные вебсайта:</b></label>
+            <input type="text" class="form-control" name="host" placeholder="Хостинг">
+            <input type="text" class="form-control" name="ip" placeholder="IP Адрес">
+            <input type="text" class="form-control" name="email" placeholder="email">
+            <br>
+            <button type="submit" class="btn btn-primary">Добавить</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

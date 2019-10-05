@@ -1,0 +1,21 @@
+[Unit]
+Description=MyApp
+StartLimitIntervalSec=11
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/dev/my_app/
+Environment=WD=/dev/my_app/
+Environment=VENV=/dev/my_app/venv/bin/activate
+ExecStart=/bin/bash -c 'cd $WD && source $VENV && gunicorn -c gunicorn_config.py run_app:app'
+Restart=always
+RestartSec=2
+StartLimitBurst=5
+User=stvoid
+Group=stvoid
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target

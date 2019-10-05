@@ -1,0 +1,76 @@
+<br>
+{% if 'logged_in' in session %}
+<div class="container">
+    <div class="pos-f-t">
+        <nav class="navbar mt-2">
+            <div class="col-auto mb-2">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    MENU
+                </button>
+            </div>
+            {% include 'choise_title.html' %}
+            <div class="col-auto mb-2 float-right">
+                <div class="btn-group">
+                    <a href="{{ url_for('user_profile') }}" role="button"
+                        class="btn btn-sm btn-success btn-secondary"><b>stvoid</b><br>
+                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                    </a>
+                    <a href="{{ url_for('logout') }}" role="button" class="btn btn-sm btn-warning btn-secondary">
+                        Выход
+                        <br>
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="collapse" id="navbarToggleExternalContent">
+            <div class="col col-centered">
+                <div class="p-4">
+                    <div class="nav flex-column nav-pills">
+                        <div class="container">
+                            <div class="row justify-content-center mt-3">
+                                <div class="col-auto mb-3">
+                                    <h6>Statistic</h6>
+                                    <hr>
+                                    <a class="nav-link {% if request.path == url_for('index') %} active{% endif %}"
+                                        href="{{ url_for('index') }}">Статистика</a>
+                                    <a class="nav-link {% if request.path == url_for('add_links') %} active{% endif %}"
+                                        href="{{ url_for('add_links') }}">Добавить ссылки</a>
+                                    <a class="nav-link {% if request.path == url_for('remove_links') %} active{% endif %}"
+                                        href="{{ url_for('remove_links') }}">Удаленить ссылки</a>
+                                </div>
+                                <div class="col-auto mb-3">
+                                    <h6>Websites</h6>
+                                    <hr>
+                                    <a class="nav-link {% if request.path == url_for('websites_table') %} active{% endif %}"
+                                        href="{{ url_for('websites_table') }}">Вебсайты</a>
+                                    <a class="nav-link {% if request.path == url_for('add_new_website') %} active{% endif %}"
+                                        href="{{ url_for('add_new_website') }}">Добавить сайт</a>
+                                </div>
+                                <div class="col-auto mb-3">
+                                    <h6>Project</h6>
+                                    <hr>
+                                    <a class="nav-link {% if request.path == url_for('project_links') %} active{% endif %}"
+                                        href="{{ url_for('project_links') }}">Проект</a>
+                                    <a class="nav-link {% if request.path == url_for('report_templates') %} active{% endif %}"
+                                        href="{{ url_for('report_templates') }}">Уведомления</a>
+                                    <a class="nav-link {% if request.path == url_for('add_project') %} active{% endif %}"
+                                        href="{{ url_for('add_project') }}">Добавить проект</a>
+                                </div>
+                                <div class="col-auto mb-3">
+                                    <h6>Settings panel</h6>
+                                    <hr>
+                                    <a class="nav-link " href="/xxx_admin_xxx/">Админка</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,11 @@
+*.csv
+*.txt
+*idea
+*.xml
+*.xlsx
+*.xls
+__pycache__
+*./*./*.xlsx
+.venv
+.u3
+.vscode
